@@ -45,12 +45,11 @@ void dumpdata(const unsigned int ticks, const char file[], const unsigned int li
 	sigaction(SIGTERM, &sig, NULL);
 	sigaction(SIGINT, &sig, NULL);
 
-	printf(_("Dumping to %s, "), file);
+	if(strcmp("-",file))
+		printf(_("Dumping to %s, "), file);
 
 	if (limit)
 		printf(_("line limit %u.\n"), limit);
-	else
-		puts(_("until termination."));
 
 	// Check the file can be output to
 	FILE *f = NULL;
@@ -137,6 +136,10 @@ void dumpdata(const unsigned int ticks, const char file[], const unsigned int li
 		if (sclk_max != 0 && sclk > 0)
 			fprintf(f, ", mclk %.2f%% %.3fghz, sclk %.2f%% %.3fghz",
 					mclk, mclk_ghz, sclk, sclk_ghz);
+
+		float temp_c = results->temp / 100000.0f;
+		float temp = 100.0f / temp_max * temp_c;
+		fprintf(f,", GPU temp %.1fC ", temp_c);
 
 		fprintf(f, "\n");
 		fflush(f);

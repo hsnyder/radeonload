@@ -29,8 +29,7 @@ static void version() {
 }
 
 static void help(const char * const me, const unsigned int ticks, const unsigned int dumpinterval) {
-	printf(_("\n\tRadeonTop for R600 and above.\n\n"
-		"\tUsage: %s [-chmv] [-b bus] [-d file] [-i seconds] [-l limit] [-p device] [-t ticks]\n\n"
+	printf(_("\tUsage: %s [-chmv] [-b bus] [-d file] [-i seconds] [-l limit] [-p device] [-t ticks]\n\n"
 		"-b --bus 3		Pick card from this PCI bus (hexadecimal)\n"
 		"-c --color		Enable colors\n"
 		"-d --dump file		Dump data to this file, - for stdout\n"
@@ -61,7 +60,7 @@ int main(int argc, char **argv) {
 	unsigned char forcemem = 0;
 	unsigned int device_id = 0;
 	unsigned int limit = 0;
-	char *dump = NULL;
+	char *dump = "-";
 	unsigned int dumpinterval = default_dumpinterval;
 	const char *path = NULL;
 
