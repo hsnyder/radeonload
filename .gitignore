@@ -1,5 +1,6 @@
 *.o
 libradeontop_xcb.so
 radeontop
+radeonload
 version.h
 *.mo

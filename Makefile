@@ -15,10 +15,10 @@ INSTALL ?= install
 LIBDIR ?= lib
 MANDIR ?= share/man
 
-nls ?= 1
-xcb ?= 1
+nls ?= 0
+xcb ?= 0
 
-bin = radeontop
+bin = radeonload
 xcblib = libradeontop_xcb.so
 src = $(filter-out amdgpu.c auth_xcb.c,$(wildcard *.c))
 verh = include/version.h
@@ -26,7 +26,7 @@ verh = include/version.h
 CFLAGS_SECTIONED = -ffunction-sections -fdata-sections
 LDFLAGS_SECTIONED = -Wl,-gc-sections
 
-CFLAGS ?= -Os
+CFLAGS ?= -g
 CFLAGS += -Wall -Wextra -pthread
 CFLAGS += -Iinclude
 CFLAGS += $(CFLAGS_SECTIONED)
@@ -80,13 +80,12 @@ LIBS += $(shell pkg-config --libs libdrm)
 LIBS += -lm
 ifeq ($(xcb), 1)
 	xcb_LIBS += $(shell pkg-config --libs xcb xcb-dri2)
-	LIBS += -ldl
 endif
 
 # On some distros, you might have to change this to ncursesw
 LIBS += $(shell pkg-config --libs ncursesw 2>/dev/null || \
 		shell pkg-config --libs ncurses 2>/dev/null || \
-		echo "-lncurses")
+		echo "-lncursesw")
 
 .PHONY: all clean install man dist
 

@@ -27,6 +27,8 @@ uint64_t vramsize;
 uint64_t gttsize;
 unsigned int sclk_max = 0; // kilohertz
 unsigned int mclk_max = 0; // kilohertz
+unsigned int temp_max = 90; // °C
+
 const void *area;
 
 // function pointers to the right backend
@@ -35,6 +37,7 @@ int (*getvram)(uint64_t *out);
 int (*getgtt)(uint64_t *out);
 int (*getsclk)(uint32_t *out);
 int (*getmclk)(uint32_t *out);
+int (*gettemp)(uint32_t *out);
 
 static int find_pci(short bus, struct pci_device *pci_dev) {
 	int ret = pci_system_init();
