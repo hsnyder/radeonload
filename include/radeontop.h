@@ -136,30 +136,15 @@ extern const char * const family_str[];
 
 // bits
 struct bits_t {
-	unsigned int ee;
-	unsigned int vgt;
 	unsigned int gui;
-	unsigned int ta;
-	unsigned int tc;
-	unsigned int sx;
-	unsigned int sh;
-	unsigned int spi;
-	unsigned int smx;
-	unsigned int sc;
-	unsigned int pa;
-	unsigned int db;
-	unsigned int cb;
-	unsigned int cr;
 	uint64_t vram;
-	uint64_t gtt;
 	unsigned int sclk;
 	unsigned int mclk;
-    unsigned int temp;
+	unsigned int temp;
 };
 
 extern struct bits_t bits;
 extern uint64_t vramsize;
-extern uint64_t gttsize;
 extern unsigned int sclk_max;
 extern unsigned int mclk_max;
 extern unsigned int temp_max;

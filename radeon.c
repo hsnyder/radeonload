@@ -120,7 +120,7 @@ void init_radeon(int fd, int drm_major, int drm_minor) {
 		}
 
 		vramsize = gem.vram_size;
-		gttsize = gem.gart_size;
+		
 
 		if (!(ret = getvram_radeon(&out64)))
 			getvram = getvram_radeon;

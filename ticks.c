@@ -44,20 +44,7 @@ static void *collector(void *arg) {
 
 		memset(&history[cur], 0, sizeof(struct bits_t));
 
-		if (stat & bits.ee) history[cur].ee = 1;
-		if (stat & bits.vgt) history[cur].vgt = 1;
 		if (stat & bits.gui) history[cur].gui = 1;
-		if (stat & bits.ta) history[cur].ta = 1;
-		if (stat & bits.tc) history[cur].tc = 1;
-		if (stat & bits.sx) history[cur].sx = 1;
-		if (stat & bits.sh) history[cur].sh = 1;
-		if (stat & bits.spi) history[cur].spi = 1;
-		if (stat & bits.smx) history[cur].smx = 1;
-		if (stat & bits.sc) history[cur].sc = 1;
-		if (stat & bits.pa) history[cur].pa = 1;
-		if (stat & bits.db) history[cur].db = 1;
-		if (stat & bits.cr) history[cur].cr = 1;
-		if (stat & bits.cb) history[cur].cb = 1;
 		getsclk(&history[cur].sclk);
 		getmclk(&history[cur].mclk);
 		gettemp(&history[cur].temp);
@@ -73,27 +60,13 @@ static void *collector(void *arg) {
 			memset(&res[curres], 0, sizeof(struct bits_t));
 
 			for (i = 0; i < ticks * dumpinterval; i++) {
-				res[curres].ee += history[i].ee;
-				res[curres].vgt += history[i].vgt;
 				res[curres].gui += history[i].gui;
-				res[curres].ta += history[i].ta;
-				res[curres].tc += history[i].tc;
-				res[curres].sx += history[i].sx;
-				res[curres].sh += history[i].sh;
-				res[curres].spi += history[i].spi;
-				res[curres].smx += history[i].smx;
-				res[curres].sc += history[i].sc;
-				res[curres].pa += history[i].pa;
-				res[curres].db += history[i].db;
-				res[curres].cb += history[i].cb;
-				res[curres].cr += history[i].cr;
 				res[curres].mclk += history[i].mclk;
 				res[curres].sclk += history[i].sclk;
-                res[curres].temp += history[i].temp;
+				res[curres].temp += history[i].temp;
 			}
 
 			getvram(&res[curres].vram);
-			getgtt(&res[curres].gtt);
 
 			// Atomically write it to the pointer
 			__sync_bool_compare_and_swap(&results, results, &res[curres]);

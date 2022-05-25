@@ -32,11 +32,6 @@ static int getvram_amdgpu(uint64_t *out) {
 				sizeof(uint64_t), out);
 }
 
-static int getgtt_amdgpu(uint64_t *out) {
-	return amdgpu_query_info(amdgpu_dev, AMDGPU_INFO_GTT_USAGE,
-				sizeof(uint64_t), out);
-}
-
 #ifdef HAS_AMDGPU_QUERY_SENSOR_INFO
 static int getsclk_amdgpu(uint32_t *out) {
 	return amdgpu_query_sensor_info(amdgpu_dev, AMDGPU_INFO_SENSOR_GFX_SCLK,
@@ -109,17 +104,11 @@ void init_amdgpu(int fd) {
 	}
 
 	vramsize = vram_gtt.vram_size;
-	gttsize = vram_gtt.gtt_size;
 
 	if (!(ret = getvram_amdgpu(&out64)))
 		getvram = getvram_amdgpu;
 	else
 		drmError(ret, _("Failed to get VRAM usage"));
-
-	if (!(ret = getgtt_amdgpu(&out64)))
-		getgtt = getgtt_amdgpu;
-	else
-		drmError(ret, _("Failed to get GTT usage"));
 }
 
 void cleanup_amdgpu() {

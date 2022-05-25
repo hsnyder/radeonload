@@ -68,78 +68,51 @@ void dumpdata(const unsigned int ticks, const char file[], const unsigned int li
 	// Action
 	unsigned int count;
 
+	const char * dash = "--------";
+
+	fprintf(f, "%8s %8s %6s   %8s %6s   %8s %8s %8s %8s\n", 
+			"gpu", "vram", "temp", "vram gb", "temp C", "mclk%", "mclk ghz", "sclk%", "sclk ghz");
+	fprintf(f, "%8s %8s %6s   %8s %6s   %8s %8s %8s %8s\n", 
+			dash, dash, "------", dash, "------", dash, dash, dash, dash);
+			
+
 	for (count = limit; !limit || count; count--) {
 
+		/*
 		struct timeval t;
 		gettimeofday(&t, NULL);
-
-		fprintf(f, "%llu.%llu: ", (unsigned long long) t.tv_sec,
-				(unsigned long long) t.tv_usec);
-
+		fprintf(f, "%llu.%llu: ", (unsigned long long) t.tv_sec, (unsigned long long) t.tv_usec);
 		fprintf(f, "bus %02x, ", bus);
+		*/
 
 		// Again, no need to protect these. Worst that happens is a slightly
 		// wrong number.
 		float k = 1.0f / ticks / dumpinterval;
-		float ee = 100 * results->ee * k;
-		float vgt = 100 * results->vgt * k;
 		float gui = 100 * results->gui * k;
-		float ta = 100 * results->ta * k;
-		float tc = 100 * results->tc * k;
-		float sx = 100 * results->sx * k;
-		float sh = 100 * results->sh * k;
-		float spi = 100 * results->spi * k;
-		float smx = 100 * results->smx * k;
-		float sc = 100 * results->sc * k;
-		float pa = 100 * results->pa * k;
-		float db = 100 * results->db * k;
-		float cr = 100 * results->cr * k;
-		float cb = 100 * results->cb * k;
 		float vram = 100.0f * results->vram / vramsize;
-		float vrammb = results->vram / 1024.0f / 1024.0f;
-		float gtt = 100.0f * results->gtt / gttsize;
-		float gttmb = results->gtt / 1024.0f / 1024.0f;
+		float vramgb = results->vram / 1024.0f / 1024.0f / 1024.0f;
 		float mclk = 100.0f * (results->mclk * k) / (mclk_max / 1e3f);
 		float sclk = 100.0f * (results->sclk * k) / (sclk_max / 1e3f);
 		float mclk_ghz = results->mclk * k / 1000.0f;
 		float sclk_ghz = results->sclk * k / 1000.0f;
 
-		fprintf(f, "gpu %.2f%%, ", gui);
-		fprintf(f, "ee %.2f%%, ", ee);
-		fprintf(f, "vgt %.2f%%, ", vgt);
-		fprintf(f, "ta %.2f%%, ", ta);
-
-		if (bits.tc)
-			fprintf(f, "tc %.2f%%, ", tc);
-
-		fprintf(f, "sx %.2f%%, ", sx);
-		fprintf(f, "sh %.2f%%, ", sh);
-		fprintf(f, "spi %.2f%%, ", spi);
-
-		if (bits.smx)
-			fprintf(f, "smx %.2f%%, ", smx);
-
-		if (bits.cr)
-			fprintf(f, "cr %.2f%%, ", cr);
-
-		fprintf(f, "sc %.2f%%, ", sc);
-		fprintf(f, "pa %.2f%%, ", pa);
-		fprintf(f, "db %.2f%%, ", db);
-		fprintf(f, "cb %.2f%%", cb);
-
-		if (bits.vram)
-			fprintf(f, ", vram %.2f%% %.2fmb", vram, vrammb);
-
-		if (bits.gtt)
-			fprintf(f, ", gtt %.2f%% %.2fmb", gtt, gttmb);
-
-		if (sclk_max != 0 && sclk > 0)
-			fprintf(f, ", mclk %.2f%% %.3fghz, sclk %.2f%% %.3fghz",
-					mclk, mclk_ghz, sclk, sclk_ghz);
+		if (!bits.vram) { 
+			vram = -1; 
+			vramgb = -1; 
+		}
 
 		float temp_c = results->temp / 100000.0f;
 		float temp = 100.0f / temp_max * temp_c;
-		fprintf(f,", GPU temp %.1fC ", temp_c);
+
+		if (!(sclk_max != 0 && sclk > 0)) {
+			mclk = -1;
+			mclk_ghz = -1;
+			sclk = -1;
+			sclk_ghz = -1;
+		}
+
+		fprintf(f, "%7.2f%% %7.2f%% %5.1f%%   %8.3f %6.1f   %7.2f%% %8.3f %7.2f%% %8.3f ", 
+				gui, vram, temp, vramgb, temp_c, mclk, mclk_ghz, sclk, sclk_ghz);
 
 		fprintf(f, "\n");
 		fflush(f);
