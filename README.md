@@ -28,24 +28,24 @@ are only useful in GL loads.
 * libpciaccess
 
 
-Simply start radeontop and it auto-selects the first supported GPU:
+Simply start radeonload and it auto-selects the first supported GPU:
 
-    ./radeontop
+    ./radeonload
 
 
-Running radeontop on a bus 0f:
+Running radeonload on a bus 0f:
 
-    ./radeontop -b 0f
+    ./radeonload -b 0f
 
 
 Writing values to stdout instead of showing a GUI:
 
-    ./radeontop -d -
+    ./radeonload -d -
 
 
 Getting all options:
 
-    ./radeontop --help
+    ./radeonload --help
 
 
 Building
