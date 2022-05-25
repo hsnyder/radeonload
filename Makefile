@@ -2,7 +2,7 @@
 # This is Linux-specific software, so we can depend on GNU make.
 
 bin = radeonload
-src = $(filter-out amdgpu.c auth_xcb.c,$(wildcard *.c))
+src = $(filter-out amdgpu.c,$(wildcard *.c))
 
 CFLAGS_SECTIONED = -ffunction-sections -fdata-sections
 LDFLAGS_SECTIONED = -Wl,-gc-sections
