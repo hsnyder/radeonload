@@ -22,9 +22,6 @@
 #define _GNU_SOURCE
 #endif
 
-#include "version.h"
-#include "gettext.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
@@ -33,6 +30,10 @@
 #include <signal.h>
 #include <locale.h>
 #include <stdint.h>
+
+
+// ripped out gettext.h
+#define _(x) x
 
 enum {
 	GRBM_STATUS = 0x8010,

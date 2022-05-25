@@ -23,13 +23,9 @@ void die(const char * const why) {
 	exit(1);
 }
 
-static void version() {
-	printf("RadeonTop %s\n", VERSION);
-	exit(1);
-}
 
 static void help(const char * const me, const unsigned int ticks, const unsigned int dumpinterval) {
-	printf(_("\tUsage: %s [-chmv] [-b bus] [-d file] [-i seconds] [-l limit] [-p device] [-t ticks]\n\n"
+	printf("\tUsage: %s [-chmv] [-b bus] [-d file] [-i seconds] [-l limit] [-p device] [-t ticks]\n\n"
 		"-b --bus 3		Pick card from this PCI bus (hexadecimal)\n"
 		"-c --color		Enable colors\n"
 		"-d --dump file		Dump data to this file, - for stdout\n"
@@ -40,8 +36,7 @@ static void help(const char * const me, const unsigned int ticks, const unsigned
 		"-t --ticks 50		Samples per second (default %u)\n"
 		"-T --transparency	Enable transparency\n"
 		"\n"
-		"-h --help		Show this help\n"
-		"-v --version		Show the version\n"),
+		"-h --help		Show this help\n",
 		me, dumpinterval, ticks);
 	die("");
 }
@@ -83,7 +78,6 @@ int main(int argc, char **argv) {
 		{"path", 1, 0, 'p'},
 		{"ticks", 1, 0, 't'},
 		{"transparency", 0, 0, 'T'},
-		{"version", 0, 0, 'v'},
 		{0, 0, 0, 0}
 	};
 
@@ -110,9 +104,6 @@ int main(int argc, char **argv) {
 			break;
 			case 'b':
 				bus = strtoul(optarg, NULL, 16);
-			break;
-			case 'v':
-				version();
 			break;
 			case 'l':
 				limit = atoi(optarg);

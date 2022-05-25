@@ -3,7 +3,6 @@
 
 bin = radeonload
 src = $(filter-out amdgpu.c auth_xcb.c,$(wildcard *.c))
-verh = include/version.h
 
 CFLAGS_SECTIONED = -ffunction-sections -fdata-sections
 LDFLAGS_SECTIONED = -Wl,-gc-sections
@@ -52,7 +51,7 @@ LIBS += $(shell pkg-config --libs ncursesw 2>/dev/null || \
 
 all: $(bin)
 
-$(obj): $(wildcard include/*.h) $(verh)
+$(obj): $(wildcard include/*.h) 
 
 $(bin): $(obj)
 	$(CC) -o $(bin) $(obj) $(CFLAGS) $(LDFLAGS) $(LIBS)
