@@ -149,10 +149,7 @@ int main(int argc, char **argv) {
 	// runtime
 	collect(ticks, dumpinterval);
 
-	if (dump)
-		dumpdata(ticks, dump, limit, bus, dumpinterval);
-	else
-		present(ticks, cardname, color,transparency, bus, dumpinterval);
+	dumpdata(ticks, dump, limit, bus, dumpinterval);
 
 	cleanup();
 	return 0;
