@@ -120,7 +120,7 @@ int main(int argc, char **argv) {
 	// runtime
 	collect(ticks, dumpinterval);
 
-	dumpdata(ticks, dump, limit, bus, dumpinterval);
+	dumpdata(ticks, dump, limit, bus, dumpinterval, cardname);
 
 	cleanup();
 	return 0;

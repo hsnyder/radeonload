@@ -30,7 +30,7 @@ static void sighandler(int sig) {
 }
 
 void dumpdata(const unsigned int ticks, const char file[], const unsigned int limit,
-		const unsigned char bus, const unsigned int dumpinterval) {
+		const unsigned char bus, const unsigned int dumpinterval, const char * card) {
 
 #ifdef ENABLE_NLS
 	// This is a data format, so disable decimal point localization
@@ -50,6 +50,9 @@ void dumpdata(const unsigned int ticks, const char file[], const unsigned int li
 
 	if (limit)
 		printf(_("line limit %u.\n"), limit);
+
+
+	printf("GPU: %s on bus %02x \n\n", card, bus);
 
 	// Check the file can be output to
 	FILE *f = NULL;
@@ -82,7 +85,6 @@ void dumpdata(const unsigned int ticks, const char file[], const unsigned int li
 		struct timeval t;
 		gettimeofday(&t, NULL);
 		fprintf(f, "%llu.%llu: ", (unsigned long long) t.tv_sec, (unsigned long long) t.tv_usec);
-		fprintf(f, "bus %02x, ", bus);
 		*/
 
 		// Again, no need to protect these. Worst that happens is a slightly
