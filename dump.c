@@ -73,10 +73,10 @@ void dumpdata(const unsigned int ticks, const char file[], const unsigned int li
 
 	const char * dash = "--------";
 
-	fprintf(f, "%8s %8s %6s   %8s %6s   %8s %8s %8s %8s\n", 
-			"gpu", "vram", "temp", "vram gb", "temp C", "mclk%", "mclk ghz", "sclk%", "sclk ghz");
-	fprintf(f, "%8s %8s %6s   %8s %6s   %8s %8s %8s %8s\n", 
-			dash, dash, "------", dash, "------", dash, dash, dash, dash);
+	fprintf(f, "%8s %8s %6s   %8s   %8s %8s %8s %8s\n", 
+			"gpu", "vram", "temp C", "vram gb", "mclk%", "mclk ghz", "sclk%", "sclk ghz");
+	fprintf(f, "%8s %8s %6s   %8s   %8s %8s %8s %8s\n", 
+			dash, dash, "------", dash, dash, dash, dash, dash);
 			
 
 	for (count = limit; !limit || count; count--) {
@@ -103,8 +103,7 @@ void dumpdata(const unsigned int ticks, const char file[], const unsigned int li
 			vramgb = -1; 
 		}
 
-		float temp_c = results->temp / 100000.0f;
-		float temp = 100.0f / temp_max * temp_c;
+		float temp_c = results->temp / 1000.0f;
 
 		if (!(sclk_max != 0 && sclk > 0)) {
 			mclk = -1;
@@ -113,8 +112,8 @@ void dumpdata(const unsigned int ticks, const char file[], const unsigned int li
 			sclk_ghz = -1;
 		}
 
-		fprintf(f, "%7.2f%% %7.2f%% %5.1f%%   %8.3f %6.1f   %7.2f%% %8.3f %7.2f%% %8.3f ", 
-				gui, vram, temp, vramgb, temp_c, mclk, mclk_ghz, sclk, sclk_ghz);
+		fprintf(f, "%7.2f%% %7.2f%% %6.1f   %8.3f   %7.2f%% %8.3f %7.2f%% %8.3f ", 
+				gui, vram, temp_c, vramgb, mclk, mclk_ghz, sclk, sclk_ghz);
 
 		fprintf(f, "\n");
 		fflush(f);

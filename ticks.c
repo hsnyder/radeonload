@@ -32,7 +32,7 @@ static void *collector(void *arg) {
 
 	struct bits_t res[2];
 
-	// Save one second's worth of history
+	// Save one dump interval worth of history
 	struct bits_t *history = calloc(ticks * dumpinterval, sizeof(struct bits_t));
 	unsigned int cur = 0, curres = 0;
 
@@ -47,7 +47,6 @@ static void *collector(void *arg) {
 		if (stat & bits.gui) history[cur].gui = 1;
 		getsclk(&history[cur].sclk);
 		getmclk(&history[cur].mclk);
-		gettemp(&history[cur].temp);
 
 		usleep(sleeptime);
 		cur++;
@@ -63,10 +62,10 @@ static void *collector(void *arg) {
 				res[curres].gui += history[i].gui;
 				res[curres].mclk += history[i].mclk;
 				res[curres].sclk += history[i].sclk;
-				res[curres].temp += history[i].temp;
 			}
 
 			getvram(&res[curres].vram);
+			gettemp(&res[curres].temp);
 
 			// Atomically write it to the pointer
 			__sync_bool_compare_and_swap(&results, results, &res[curres]);

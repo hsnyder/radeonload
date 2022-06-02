@@ -25,7 +25,7 @@ void die(const char * const why) {
 
 
 static void help(const char * const me, const unsigned int ticks, const unsigned int dumpinterval) {
-	printf("\tUsage: %s [-chmv] [-b bus] [-d file] [-i seconds] [-l limit] [-p device] [-t ticks]\n\n"
+	printf("\tUsage: %s [-hm] [-b bus] [-d file] [-i seconds] [-l limit] [-p device] [-t ticks]\n\n"
 		"-b --bus 3		Pick card from this PCI bus (hexadecimal)\n"
 		"-d --dump file		Dump data to this file, - for stdout\n"
 		"-i --dump-interval 1	Number of seconds between dumps (default %u)\n"
