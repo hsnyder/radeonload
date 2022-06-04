@@ -16,6 +16,7 @@
 */
 
 #include "radeontop.h"
+#include <math.h>
 
 static unsigned char quit = 0;
 
@@ -30,7 +31,7 @@ static void sighandler(int sig) {
 }
 
 void dumpdata(const unsigned int ticks, const char file[], const unsigned int limit,
-		const unsigned char bus, const unsigned int dumpinterval, const char * card) {
+		const unsigned char bus, const unsigned int dumpinterval, const char * card, int visual) {
 
 #ifdef ENABLE_NLS
 	// This is a data format, so disable decimal point localization
@@ -71,12 +72,18 @@ void dumpdata(const unsigned int ticks, const char file[], const unsigned int li
 	// Action
 	unsigned int count;
 
-	const char * dash = "--------";
-
-	fprintf(f, "%8s %8s %6s   %8s   %8s %8s %8s %8s\n", 
-			"gpu", "vram", "temp C", "vram gb", "mclk%", "mclk ghz", "sclk%", "sclk ghz");
-	fprintf(f, "%8s %8s %6s   %8s   %8s %8s %8s %8s\n", 
-			dash, dash, "------", dash, dash, dash, dash, dash);
+	if (visual) {
+		fprintf(f, "%16s    %16s    %6s    %8s\n", 
+				"GPU", "VRAM", "Temp C", "VRAM GB" );
+		fprintf(f, "%16s    %16s    %6s    %8s\n", 
+				"----------------", "----------------", "------", "--------" );
+	} else {
+		const char * dash8 = "--------";
+		fprintf(f, "%8s %8s %6s   %8s   %8s %8s %8s %8s\n", 
+				"GPU", "VRAM", "Temp C", "VRAM GB", "mclk%", "mclk ghz", "sclk%", "sclk ghz");
+		fprintf(f, "%8s %8s %6s   %8s   %8s %8s %8s %8s\n", 
+				dash8, dash8, "------", dash8, dash8, dash8, dash8, dash8);
+	}
 			
 
 	for (count = limit; !limit || count; count--) {
@@ -112,10 +119,20 @@ void dumpdata(const unsigned int ticks, const char file[], const unsigned int li
 			sclk_ghz = -1;
 		}
 
-		fprintf(f, "%7.2f%% %7.2f%% %6.1f   %8.3f   %7.2f%% %8.3f %7.2f%% %8.3f ", 
+		if (visual) {
+			char bar_gpu[11] = "          ";
+			char bar_mem[11] = "          ";
+			for (int i = 0; i < 10; i++) {
+				if (i < roundf(gui/10))  bar_gpu[i] = '=';
+				if (i < roundf(vram/10)) bar_mem[i] = '=';
+			}
+			fprintf(f, "[%10s]%3.0f%%    [%10s]%3.0f%%    %6.1f    %8.3f\n", 
+				bar_gpu, gui, bar_mem, vram, temp_c, vramgb);
+		} else {
+			fprintf(f, "%7.2f%% %7.2f%% %6.1f   %8.3f   %7.2f%% %8.3f %7.2f%% %8.3f\n", 
 				gui, vram, temp_c, vramgb, mclk, mclk_ghz, sclk, sclk_ghz);
+		}
 
-		fprintf(f, "\n");
 		fflush(f);
 
 		// Did we get a termination signal?

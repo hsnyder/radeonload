@@ -25,7 +25,7 @@ void die(const char * const why) {
 
 
 static void help(const char * const me, const unsigned int ticks, const unsigned int dumpinterval) {
-	printf("\tUsage: %s [-hm] [-b bus] [-d file] [-i seconds] [-l limit] [-p device] [-t ticks]\n\n"
+	printf("\tUsage: %s [-hmv] [-b bus] [-d file] [-i seconds] [-l limit] [-p device] [-t ticks]\n\n"
 		"-b --bus 3		Pick card from this PCI bus (hexadecimal)\n"
 		"-d --dump file		Dump data to this file, - for stdout\n"
 		"-i --dump-interval 1	Number of seconds between dumps (default %u)\n"
@@ -33,6 +33,7 @@ static void help(const char * const me, const unsigned int ticks, const unsigned
 		"-m --mem		Force the /dev/mem path, for the proprietary driver\n"
 		"-p --path device	Open DRM device node by path\n"
 		"-t --ticks 50		Samples per second (default %u)\n"
+		"-v --visual  		Print bars to give a visual indication of load\n"
 		"\n"
 		"-h --help		Show this help\n",
 		me, dumpinterval, ticks);
@@ -55,6 +56,8 @@ int main(int argc, char **argv) {
 	unsigned int dumpinterval = default_dumpinterval;
 	const char *path = NULL;
 
+	int visual = 0;
+
 	// opts
 	const struct option opts[] = {
 		{"bus", 1, 0, 'b'},
@@ -65,6 +68,7 @@ int main(int argc, char **argv) {
 		{"mem", 0, 0, 'm'},
 		{"path", 1, 0, 'p'},
 		{"ticks", 1, 0, 't'},
+		{"visual", 0, 0, 'v'},
 		{0, 0, 0, 0}
 	};
 
@@ -73,32 +77,36 @@ int main(int argc, char **argv) {
 		if (c == -1) break;
 
 		switch(c) {
-			case 'h':
-			case '?':
-				help(argv[0], default_ticks, default_dumpinterval);
+		case 'h':
+		case '?':
+			help(argv[0], default_ticks, default_dumpinterval);
 			break;
-			case 't':
-				ticks = atoi(optarg);
+
+		case 'v':
+			visual = 1;
 			break;
-			case 'm':
-				forcemem = 1;
+		case 't':
+			ticks = atoi(optarg);
 			break;
-			case 'b':
-				bus = strtoul(optarg, NULL, 16);
+		case 'm':
+			forcemem = 1;
 			break;
-			case 'l':
-				limit = atoi(optarg);
+		case 'b':
+			bus = strtoul(optarg, NULL, 16);
 			break;
-			case 'd':
-				dump = optarg;
+		case 'l':
+			limit = atoi(optarg);
 			break;
-			case 'i':
-				dumpinterval = atoi(optarg);
-				if (dumpinterval < 1)
-					dumpinterval = 1;
+		case 'd':
+			dump = optarg;
 			break;
-			case 'p':
-				path = optarg;
+		case 'i':
+			dumpinterval = atoi(optarg);
+			if (dumpinterval < 1)
+				dumpinterval = 1;
+			break;
+		case 'p':
+			path = optarg;
 		}
 	}
 
@@ -120,7 +128,7 @@ int main(int argc, char **argv) {
 	// runtime
 	collect(ticks, dumpinterval);
 
-	dumpdata(ticks, dump, limit, bus, dumpinterval, cardname);
+	dumpdata(ticks, dump, limit, bus, dumpinterval, cardname, visual);
 
 	cleanup();
 	return 0;
